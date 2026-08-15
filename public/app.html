@@ -3,29 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Social Auth Launcher</title>
 
   <style>
-    /* =========================
-       Base / Background
-    ========================== */
-
     :root {
       --bg-1: #060914;
       --bg-2: #0c1223;
       --panel: rgba(14, 20, 35, 0.72);
-      --panel-2: rgba(255, 255, 255, 0.06);
       --stroke: rgba(255, 255, 255, 0.09);
       --text: #eef3ff;
       --muted: rgba(238, 243, 255, 0.72);
       --success: #59f59d;
       --error: #ff6b6b;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
-
       --radius-xl: 30px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
     }
 
     * {
@@ -34,11 +26,12 @@
 
     html,
     body {
-      height: 100%;
+      min-height: 100%;
     }
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family:
         Inter,
         system-ui,
@@ -75,6 +68,10 @@
         );
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     .noise {
       position: fixed;
       inset: 0;
@@ -109,9 +106,8 @@
       padding: 24px;
     }
 
-
     /* =========================
-       Launcher Panel
+       LAUNCHER
     ========================== */
 
     .launcher {
@@ -122,7 +118,6 @@
       border-radius: var(--radius-xl);
 
       background: var(--panel);
-
       backdrop-filter: blur(18px);
 
       box-shadow: var(--shadow);
@@ -133,7 +128,6 @@
 
     .launcher::before {
       content: "";
-
       position: absolute;
       inset: -2px;
 
@@ -192,8 +186,7 @@
       box-shadow:
         0 0 14px rgba(94, 255, 155, 0.9);
 
-      animation:
-        pulse 1.8s infinite ease-in-out;
+      animation: pulse 1.8s infinite ease-in-out;
     }
 
     h1 {
@@ -217,9 +210,8 @@
       line-height: 1.6;
     }
 
-
     /* =========================
-       App Grid
+       APP GRID
     ========================== */
 
     .grid {
@@ -273,7 +265,6 @@
         filter 220ms ease;
 
       overflow: hidden;
-
       outline: none;
     }
 
@@ -284,22 +275,12 @@
         rotateY(-6deg)
         scale(1.01);
 
-      border-color:
-        color-mix(
-          in srgb,
-          var(--accent) 55%,
-          white 15%
-        );
+      border-color: var(--accent);
 
       box-shadow:
         0 18px 45px rgba(0, 0, 0, 0.35),
         0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-        0 0 28px
-        color-mix(
-          in srgb,
-          var(--accent) 38%,
-          transparent
-        );
+        0 0 28px rgba(255, 255, 255, 0.12);
     }
 
     .social-btn:active {
@@ -311,12 +292,7 @@
     .social-btn:focus-visible {
       box-shadow:
         0 0 0 3px rgba(255, 255, 255, 0.14),
-        0 0 0 6px
-        color-mix(
-          in srgb,
-          var(--accent) 45%,
-          transparent
-        );
+        0 0 0 6px rgba(255, 255, 255, 0.1);
     }
 
     .social-btn::before {
@@ -328,16 +304,11 @@
       background:
         radial-gradient(
           circle at top,
-          color-mix(
-            in srgb,
-            var(--accent) 26%,
-            transparent
-          ),
+          rgba(255, 255, 255, 0.12),
           transparent 60%
         );
 
       opacity: 0.9;
-
       pointer-events: none;
     }
 
@@ -387,14 +358,7 @@
         rgba(255, 255, 255, 0.16),
 
         0 16px 28px
-        rgba(0, 0, 0, 0.25),
-
-        0 0 22px
-        color-mix(
-          in srgb,
-          var(--accent) 20%,
-          transparent
-        );
+        rgba(0, 0, 0, 0.25);
 
       position: relative;
 
@@ -428,9 +392,8 @@
       transform: translateZ(10px);
     }
 
-
     /* =========================
-       Ripple
+       RIPPLE
     ========================== */
 
     .ripple {
@@ -450,8 +413,7 @@
           transparent 70%
         );
 
-      animation:
-        ripple 650ms ease-out;
+      animation: ripple 650ms ease-out;
 
       mix-blend-mode: screen;
     }
@@ -476,9 +438,8 @@
       }
     }
 
-
     /* =========================
-       App Colors
+       APP COLORS
     ========================== */
 
     .ig {
@@ -549,9 +510,8 @@
         );
     }
 
-
     /* =========================
-       Auth Modal
+       AUTH MODAL
     ========================== */
 
     .modal {
@@ -564,7 +524,7 @@
       padding: 18px;
 
       background:
-        rgba(5, 8, 15, 0.68);
+        rgba(5, 8, 15, 0.72);
 
       backdrop-filter: blur(12px);
 
@@ -581,14 +541,13 @@
 
     .modal.open {
       opacity: 1;
-
       visibility: visible;
-
       pointer-events: auto;
     }
 
     .modal-card {
       width: min(560px, 100%);
+      max-height: calc(100vh - 36px);
 
       border-radius: 30px;
 
@@ -601,12 +560,13 @@
           rgba(255, 255, 255, 0.14),
           rgba(255, 255, 255, 0.05)
         ),
-        rgba(12, 18, 33, 0.88);
+        rgba(12, 18, 33, 0.96);
 
       box-shadow:
         0 30px 90px rgba(0, 0, 0, 0.56);
 
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
 
       transform:
         translateY(14px)
@@ -625,7 +585,7 @@
     .modal-top {
       position: relative;
 
-      padding: 22px 22px 18px;
+      padding: 22px;
 
       border-bottom:
         1px solid rgba(255, 255, 255, 0.08);
@@ -744,32 +704,28 @@
 
     .form-shell {
       position: relative;
-
       min-height: 390px;
     }
 
     .auth-pane {
-      position: absolute;
-
-      inset: 0;
-
-      opacity: 0;
-
-      transform: translateX(16px);
-
-      pointer-events: none;
-
-      transition:
-        opacity 240ms ease,
-        transform 240ms ease;
+      display: none;
     }
 
     .auth-pane.active {
-      opacity: 1;
+      display: block;
+      animation: paneIn 240ms ease;
+    }
 
-      transform: translateX(0);
+    @keyframes paneIn {
+      from {
+        opacity: 0;
+        transform: translateX(16px);
+      }
 
-      pointer-events: auto;
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .auth-copy h2 {
@@ -798,9 +754,6 @@
       font-size: 0.92rem;
 
       font-weight: 600;
-
-      transition:
-        opacity 180ms ease;
     }
 
     .message.success {
@@ -860,22 +813,14 @@
 
     .field input:focus {
       border-color:
-        color-mix(
-          in srgb,
-          var(--theme-accent) 70%,
-          white 10%
-        );
+        var(--theme-accent);
 
       background:
         rgba(255, 255, 255, 0.085);
 
       box-shadow:
         0 0 0 4px
-        color-mix(
-          in srgb,
-          var(--theme-accent) 25%,
-          transparent
-        );
+        rgba(255, 255, 255, 0.08);
     }
 
     .aux-row {
@@ -940,11 +885,7 @@
 
       box-shadow:
         0 14px 30px
-        color-mix(
-          in srgb,
-          var(--theme-accent) 26%,
-          transparent
-        );
+        rgba(0, 0, 0, 0.22);
 
       transition:
         transform 180ms ease,
@@ -953,7 +894,6 @@
 
     .primary-btn:hover {
       transform: translateY(-1px);
-
       filter: brightness(1.04);
     }
 
@@ -963,9 +903,7 @@
 
     .primary-btn:disabled {
       opacity: 0.65;
-
       cursor: not-allowed;
-
       transform: none;
     }
 
@@ -1012,7 +950,7 @@
       padding: 0 22px 22px;
     }
 
-    .modal-footer .mini-row {
+    .mini-row {
       display: flex;
 
       justify-content: space-between;
@@ -1032,17 +970,60 @@
         1px solid rgba(255, 255, 255, 0.08);
 
       padding-top: 14px;
+
+      margin-top: 14px;
     }
 
     .brand-name {
       font-weight: 800;
-
       color: var(--text);
     }
 
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    .logout-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logout-btn {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+
+      background:
+        rgba(255, 255, 255, 0.05);
+
+      color: var(--muted);
+
+      border-radius: 12px;
+
+      padding: 10px 16px;
+
+      cursor: pointer;
+
+      font-weight: 700;
+
+      transition:
+        background 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .logout-btn:hover {
+      background:
+        rgba(255, 107, 107, 0.12);
+
+      color: #ff8d8d;
+
+      transform: translateY(-1px);
+    }
 
     /* =========================
-       Themes
+       THEMES
     ========================== */
 
     .theme-instagram {
@@ -1055,9 +1036,7 @@
         );
 
       --theme-accent: #ff4ecd;
-
       --theme-accent-2: #ff8a3d;
-
       --theme-link: #ffb3ea;
     }
 
@@ -1071,9 +1050,7 @@
         );
 
       --theme-accent: #2d5bff;
-
       --theme-accent-2: #8fb0ff;
-
       --theme-link: #d7e3ff;
     }
 
@@ -1087,9 +1064,7 @@
         );
 
       --theme-accent: #00f2ea;
-
       --theme-accent-2: #ff4d6d;
-
       --theme-link: #a8fff7;
     }
 
@@ -1102,9 +1077,7 @@
         );
 
       --theme-accent: #f5f7ff;
-
       --theme-accent-2: #b8bcc8;
-
       --theme-link: #ffffff;
     }
 
@@ -1114,9 +1087,8 @@
         rgba(255, 255, 255, 0.07);
     }
 
-
     /* =========================
-       Responsive
+       RESPONSIVE
     ========================== */
 
     @media (max-width: 820px) {
@@ -1132,10 +1104,6 @@
       .social-btn {
         min-height: 164px;
       }
-
-      .form-shell {
-        min-height: 420px;
-      }
     }
 
     @media (max-width: 520px) {
@@ -1145,26 +1113,22 @@
 
       .launcher {
         padding: 18px;
-
         border-radius: 22px;
       }
 
       .grid {
         grid-template-columns: 1fr;
-
         gap: 14px;
       }
 
       .social-btn {
         min-height: 146px;
-
         border-radius: 20px;
       }
 
       .icon-shell {
         width: 76px;
         height: 76px;
-
         border-radius: 24px;
       }
 
@@ -1182,10 +1146,6 @@
       .modal-footer {
         padding-left: 16px;
         padding-right: 16px;
-      }
-
-      .form-shell {
-        min-height: 470px;
       }
 
       .aux-row {
@@ -1218,18 +1178,15 @@
         </div>
 
         <h1>
-          Choose a platform to sign in or create an account
+          Choose a platform
         </h1>
 
         <p>
-          Tap any brand card to open a matching login and
-          sign-up experience with animated transitions,
-          glassmorphism styling, and secure backend
-          authentication.
+          Sign in or create an account for your selected
+          platform.
         </p>
 
       </div>
-
 
       <div class="grid">
 
@@ -1242,10 +1199,7 @@
           aria-label="Open Instagram authentication"
         >
 
-          <span
-            class="icon-shell"
-            aria-hidden="true"
-          >
+          <span class="icon-shell" aria-hidden="true">
 
             <svg viewBox="0 0 24 24">
 
@@ -1280,13 +1234,8 @@
 
           </span>
 
-          <span class="label">
-            Instagram
-          </span>
-
-          <span class="handle">
-            IG
-          </span>
+          <span class="label">Instagram</span>
+          <span class="handle">IG</span>
 
         </button>
 
@@ -1300,10 +1249,7 @@
           aria-label="Open Facebook authentication"
         >
 
-          <span
-            class="icon-shell"
-            aria-hidden="true"
-          >
+          <span class="icon-shell" aria-hidden="true">
 
             <svg viewBox="0 0 24 24">
 
@@ -1316,13 +1262,8 @@
 
           </span>
 
-          <span class="label">
-            Facebook
-          </span>
-
-          <span class="handle">
-            FB
-          </span>
+          <span class="label">Facebook</span>
+          <span class="handle">FB</span>
 
         </button>
 
@@ -1336,10 +1277,7 @@
           aria-label="Open TikTok authentication"
         >
 
-          <span
-            class="icon-shell"
-            aria-hidden="true"
-          >
+          <span class="icon-shell" aria-hidden="true">
 
             <svg viewBox="0 0 24 24">
 
@@ -1352,13 +1290,8 @@
 
           </span>
 
-          <span class="label">
-            TikTok
-          </span>
-
-          <span class="handle">
-            TT
-          </span>
+          <span class="label">TikTok</span>
+          <span class="handle">TT</span>
 
         </button>
 
@@ -1372,10 +1305,7 @@
           aria-label="Open X authentication"
         >
 
-          <span
-            class="icon-shell"
-            aria-hidden="true"
-          >
+          <span class="icon-shell" aria-hidden="true">
 
             <svg viewBox="0 0 24 24">
 
@@ -1388,14 +1318,23 @@
 
           </span>
 
-          <span class="label">
-            X
-          </span>
+          <span class="label">X</span>
+          <span class="handle">Twitter</span>
 
-          <span class="handle">
-            Twitter
-          </span>
+        </button>
 
+      </div>
+
+      <!-- Logout -->
+
+      <div class="logout-wrap">
+
+        <button
+          class="logout-btn"
+          id="logoutBtn"
+          type="button"
+        >
+          Log Out
         </button>
 
       </div>
@@ -1416,13 +1355,11 @@
   >
 
     <div
-      class="modal-card"
+      class="modal-card theme-instagram"
       role="dialog"
       aria-modal="true"
       aria-labelledby="authTitle"
     >
-
-      <!-- Modal Header -->
 
       <div
         class="modal-top"
@@ -1436,11 +1373,10 @@
             <span class="brand-dot"></span>
 
             <span id="brandBadgeText">
-              Brand Authentication
+              Instagram Authentication
             </span>
 
           </div>
-
 
           <div class="modal-controls">
 
@@ -1448,7 +1384,7 @@
               class="icon-btn"
               type="button"
               id="backBtn"
-              aria-label="Back to app selection"
+              aria-label="Back"
             >
               ←
             </button>
@@ -1457,7 +1393,7 @@
               class="icon-btn"
               type="button"
               id="closeBtn"
-              aria-label="Close authentication modal"
+              aria-label="Close"
             >
               ×
             </button>
@@ -1469,16 +1405,11 @@
       </div>
 
 
-      <!-- Modal Body -->
-
       <div class="modal-body">
 
         <div class="form-shell">
 
-
-          <!-- =========================
-               LOGIN
-          ========================== -->
+          <!-- LOGIN -->
 
           <section
             class="auth-pane active"
@@ -1488,15 +1419,14 @@
             <div class="auth-copy">
 
               <h2 id="authTitle">
-                Welcome back
+                Welcome to Instagram
               </h2>
 
               <p id="authSubtitle">
-                Log in to continue to your social account.
+                Use your Instagram username or email to log in.
               </p>
 
             </div>
-
 
             <div
               class="message"
@@ -1562,7 +1492,7 @@
                   type="button"
                   id="goToSignupBtn"
                 >
-                  Switch to Sign Up
+                  Create Account
                 </button>
 
               </div>
@@ -1581,9 +1511,7 @@
           </section>
 
 
-          <!-- =========================
-               SIGN UP
-          ========================== -->
+          <!-- SIGN UP -->
 
           <section
             class="auth-pane"
@@ -1597,7 +1525,7 @@
               </h2>
 
               <p id="signupSubtitle">
-                Join this platform with a new account.
+                Create your Instagram account.
               </p>
 
             </div>
@@ -1664,6 +1592,7 @@
                   type="password"
                   placeholder="Create a password"
                   autocomplete="new-password"
+                  minlength="8"
                   required
                 />
 
@@ -1682,6 +1611,7 @@
                   type="password"
                   placeholder="Confirm your password"
                   autocomplete="new-password"
+                  minlength="8"
                   required
                 />
 
@@ -1718,22 +1648,17 @@
       </div>
 
 
-      <!-- =========================
-           FOOTER
-      ========================== -->
-
       <div class="modal-footer">
 
         <div class="hint">
 
-          Your account is securely processed by
-          the Node.js backend.
+          Authentication is handled by your Node.js backend.
 
           <div
             class="demo-list"
             id="demoHint"
           >
-            Backend authentication enabled.
+            Backend authentication ready.
           </div>
 
         </div>
@@ -1766,266 +1691,465 @@
   ========================== -->
 
   <script>
+    "use strict";
 
-    // =========================
-    // Configuration
-    // =========================
+    /*
+      IMPORTANT:
+
+      Your Node.js server must serve this HTML.
+
+      Expected API endpoints:
+
+        POST /api/auth/register
+        POST /api/auth/login
+
+      Register body:
+
+        {
+          identifier,
+          password,
+          displayName
+        }
+
+      Login body:
+
+        {
+          identifier,
+          password
+        }
+
+      Login response should preferably be:
+
+        {
+          token: "JWT_HERE",
+          user: {...}
+        }
+
+      Cookie/session authentication is also supported.
+    */
+
+
+    /* =========================
+       CONFIGURATION
+    ========================== */
+
+    const API_BASE_URL =
+      window.AUTH_API_BASE_URL || "/api/auth";
+
+
+    const TOKEN_KEY =
+      "socialAuthToken";
+
 
     const APP_CONFIG = {
 
       instagram: {
-        name: 'Instagram',
-        short: 'IG',
-        className: 'theme-instagram',
-        accent: '#ff4ecd',
+        name: "Instagram",
+        short: "IG",
+        className: "theme-instagram",
+
+        accent: "#ff4ecd",
+
         loginHint:
-          'Use your Instagram username or email to log in.',
+          "Use your Instagram username or email to log in.",
+
         signupHint:
-          'Create your Instagram-style account.'
+          "Create your Instagram account."
       },
+
 
       facebook: {
-        name: 'Facebook',
-        short: 'FB',
-        className: 'theme-facebook',
-        accent: '#2d5bff',
+        name: "Facebook",
+        short: "FB",
+        className: "theme-facebook",
+
+        accent: "#2d5bff",
+
         loginHint:
-          'Use your Facebook username or email to log in.',
+          "Use your Facebook username or email to log in.",
+
         signupHint:
-          'Create your Facebook-style account.'
+          "Create your Facebook account."
       },
+
 
       tiktok: {
-        name: 'TikTok',
-        short: 'TT',
-        className: 'theme-tiktok',
-        accent: '#00f2ea',
+        name: "TikTok",
+        short: "TT",
+        className: "theme-tiktok",
+
+        accent: "#00f2ea",
+
         loginHint:
-          'Use your TikTok username or email to log in.',
+          "Use your TikTok username or email to log in.",
+
         signupHint:
-          'Create your TikTok-style account.'
+          "Create your TikTok account."
       },
 
+
       x: {
-        name: 'X',
-        short: 'X',
-        className: 'theme-x',
-        accent: '#f5f7ff',
+        name: "X",
+        short: "X",
+        className: "theme-x",
+
+        accent: "#f5f7ff",
+
         loginHint:
-          'Use your X username or email to log in.',
+          "Use your X username or email to log in.",
+
         signupHint:
-          'Create your X-style account.'
+          "Create your X account."
       }
 
     };
 
 
-    // =========================
-    // Backend URL
-    // =========================
+    /* =========================
+       DOM ELEMENTS
+    ========================== */
 
-    const API_BASE_URL =
-      'http://localhost:3000/api/auth';
+    const body =
+      document.body;
 
 
-    // =========================
-    // Elements
-    // =========================
+    const launcher =
+      document.querySelector(".launcher");
+
 
     const appButtons =
       document.querySelectorAll(
-        '.social-btn[data-app]'
+        ".social-btn[data-app]"
       );
 
+
     const modal =
-      document.getElementById('authModal');
+      document.getElementById("authModal");
+
 
     const modalCard =
-      modal.querySelector('.modal-card');
+      modal.querySelector(".modal-card");
+
 
     const modalTop =
-      document.getElementById('modalTop');
+      document.getElementById("modalTop");
+
 
     const closeBtn =
-      document.getElementById('closeBtn');
+      document.getElementById("closeBtn");
+
 
     const backBtn =
-      document.getElementById('backBtn');
+      document.getElementById("backBtn");
+
 
     const brandBadgeText =
-      document.getElementById('brandBadgeText');
+      document.getElementById("brandBadgeText");
+
 
     const brandFooterName =
-      document.getElementById('brandFooterName');
+      document.getElementById("brandFooterName");
+
 
     const authTitle =
-      document.getElementById('authTitle');
+      document.getElementById("authTitle");
+
 
     const authSubtitle =
-      document.getElementById('authSubtitle');
+      document.getElementById("authSubtitle");
+
 
     const signupSubtitle =
-      document.getElementById('signupSubtitle');
+      document.getElementById("signupSubtitle");
+
 
     const demoHint =
-      document.getElementById('demoHint');
+      document.getElementById("demoHint");
 
-
-    // Login
 
     const loginPane =
-      document.getElementById('loginPane');
+      document.getElementById("loginPane");
 
-    const loginMessage =
-      document.getElementById('loginMessage');
-
-    const loginForm =
-      document.getElementById('loginForm');
-
-    const loginIdentifier =
-      document.getElementById('loginIdentifier');
-
-    const loginPassword =
-      document.getElementById('loginPassword');
-
-    const loginSubmit =
-      document.getElementById('loginSubmit');
-
-
-    // Sign Up
 
     const signupPane =
-      document.getElementById('signupPane');
+      document.getElementById("signupPane");
+
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
 
     const signupMessage =
-      document.getElementById('signupMessage');
+      document.getElementById("signupMessage");
+
+
+    const loginForm =
+      document.getElementById("loginForm");
+
 
     const signupForm =
-      document.getElementById('signupForm');
+      document.getElementById("signupForm");
+
+
+    const loginIdentifier =
+      document.getElementById("loginIdentifier");
+
+
+    const loginPassword =
+      document.getElementById("loginPassword");
+
 
     const signupFullName =
-      document.getElementById('signupFullName');
+      document.getElementById("signupFullName");
+
 
     const signupIdentifier =
-      document.getElementById('signupIdentifier');
+      document.getElementById("signupIdentifier");
+
 
     const signupPassword =
-      document.getElementById('signupPassword');
+      document.getElementById("signupPassword");
+
 
     const signupConfirmPassword =
-      document.getElementById('signupConfirmPassword');
+      document.getElementById("signupConfirmPassword");
+
+
+    const loginSubmit =
+      document.getElementById("loginSubmit");
+
 
     const signupSubmit =
-      document.getElementById('signupSubmit');
+      document.getElementById("signupSubmit");
 
-
-    // Other controls
 
     const forgotBtn =
-      document.getElementById('forgotBtn');
+      document.getElementById("forgotBtn");
+
 
     const goToSignupBtn =
-      document.getElementById('goToSignupBtn');
+      document.getElementById("goToSignupBtn");
+
 
     const goToLoginBtn =
-      document.getElementById('goToLoginBtn');
+      document.getElementById("goToLoginBtn");
 
 
-    // =========================
-    // State
-    // =========================
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+
+    /* =========================
+       STATE
+    ========================== */
 
     let currentApp =
-      'instagram';
+      "instagram";
+
 
     let currentView =
-      'login';
+      "login";
 
 
-    // =========================
-    // Messages
-    // =========================
+    /* =========================
+       HELPERS
+    ========================== */
+
+    function getToken() {
+
+      try {
+
+        return localStorage.getItem(
+          TOKEN_KEY
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Could not access localStorage:",
+          error
+        );
+
+        return null;
+      }
+    }
+
+
+    function saveToken(token) {
+
+      if (!token) {
+        return;
+      }
+
+      try {
+
+        localStorage.setItem(
+          TOKEN_KEY,
+          token
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Could not save token:",
+          error
+        );
+      }
+    }
+
+
+    function removeToken() {
+
+      try {
+
+        localStorage.removeItem(
+          TOKEN_KEY
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Could not remove token:",
+          error
+        );
+      }
+    }
+
 
     function showMessage(
       target,
       text,
-      type = ''
+      type = ""
     ) {
 
       target.textContent =
-        text;
+        text || "";
 
       target.className =
-        `message ${type}`.trim();
+        type
+          ? `message ${type}`
+          : "message";
     }
 
 
     function clearMessages() {
 
       showMessage(
-        loginMessage,
-        '',
-        ''
+        loginMessage
       );
 
       showMessage(
-        signupMessage,
-        '',
-        ''
+        signupMessage
       );
-
     }
 
 
-    // =========================
-    // Switch Login / Sign Up
-    // =========================
+    function setAuthenticated(
+      authenticated
+    ) {
 
-    function setView(view) {
-
-      currentView =
-        view;
-
-      clearMessages();
-
-
-      loginPane.classList.toggle(
-        'active',
-        view === 'login'
+      body.classList.toggle(
+        "authenticated",
+        authenticated
       );
 
+      launcher.style.display =
+        authenticated
+          ? "block"
+          : "none";
+    }
 
-      signupPane.classList.toggle(
-        'active',
-        view === 'signup'
+
+    function setButtonLoading(
+      button,
+      loadingText,
+      isLoading
+    ) {
+
+      button.disabled =
+        isLoading;
+
+      button.textContent =
+        isLoading
+          ? loadingText
+          : button.dataset.originalText;
+    }
+
+
+    function extractError(
+      data,
+      fallback
+    ) {
+
+      if (!data) {
+        return fallback;
+      }
+
+      if (typeof data === "string") {
+        return data;
+      }
+
+      return (
+        data.error ||
+        data.message ||
+        data.details ||
+        fallback
       );
+    }
 
 
-      setTimeout(() => {
+    async function parseResponse(
+      response
+    ) {
 
-        if (view === 'login') {
+      const contentType =
+        response.headers.get(
+          "content-type"
+        ) || "";
 
-          loginIdentifier.focus();
 
-        } else {
+      if (
+        contentType.includes(
+          "application/json"
+        )
+      ) {
 
-          signupFullName.focus();
-
+        try {
+          return await response.json();
+        } catch {
+          return {};
         }
 
-      }, 250);
+      }
 
+
+      try {
+
+        const text =
+          await response.text();
+
+        return text
+          ? { message: text }
+          : {};
+
+      } catch {
+
+        return {};
+      }
     }
 
 
-    // =========================
-    // Apply Theme
-    // =========================
+    /* =========================
+       THEME
+    ========================== */
 
-    function applyTheme(appKey) {
+    function applyTheme(
+      appKey
+    ) {
 
       const config =
         APP_CONFIG[appKey];
+
 
       if (!config) {
         return;
@@ -2057,7 +2181,7 @@
 
 
       modalTop.style.setProperty(
-        '--theme-gradient',
+        "--theme-gradient",
         `linear-gradient(
           135deg,
           ${config.accent},
@@ -2066,19 +2190,72 @@
       );
 
 
-      demoHint.textContent =
-        `Connected to backend authentication for ${config.name}.`;
+      modalCard.style.setProperty(
+        "--theme-accent",
+        config.accent
+      );
 
+
+      demoHint.textContent =
+        `Backend authentication is ready for ${config.name}.`;
     }
 
 
-    // =========================
-    // Open Modal
-    // =========================
+    /* =========================
+       LOGIN / SIGN UP VIEW
+    ========================== */
 
-    function openModal(appKey) {
+    function setView(
+      view
+    ) {
 
-      if (!APP_CONFIG[appKey]) {
+      currentView =
+        view;
+
+      clearMessages();
+
+
+      loginPane.classList.toggle(
+        "active",
+        view === "login"
+      );
+
+
+      signupPane.classList.toggle(
+        "active",
+        view === "signup"
+      );
+
+
+      setTimeout(() => {
+
+        if (
+          view === "login"
+        ) {
+
+          loginIdentifier.focus();
+
+        } else {
+
+          signupFullName.focus();
+
+        }
+
+      }, 100);
+    }
+
+
+    /* =========================
+       OPEN AUTH
+    ========================== */
+
+    function openModal(
+      appKey
+    ) {
+
+      if (
+        !APP_CONFIG[appKey]
+      ) {
         return;
       }
 
@@ -2093,30 +2270,34 @@
 
 
       loginForm.reset();
-
       signupForm.reset();
 
 
       setView(
-        'login'
+        "login"
       );
 
 
       modal.classList.add(
-        'open'
+        "open"
+      );
+
+
+      body.classList.add(
+        "modal-open"
       );
 
 
       modal.setAttribute(
-        'aria-hidden',
-        'false'
+        "aria-hidden",
+        "false"
       );
 
 
       showMessage(
         loginMessage,
-        `Ready for ${APP_CONFIG[appKey].name}. You can log in or create an account.`,
-        'success'
+        `Sign in to ${APP_CONFIG[appKey].name} or create a new account.`,
+        "success"
       );
 
 
@@ -2124,25 +2305,29 @@
 
         loginIdentifier.focus();
 
-      }, 250);
-
+      }, 150);
     }
 
 
-    // =========================
-    // Close Modal
-    // =========================
+    /* =========================
+       CLOSE AUTH
+    ========================== */
 
     function closeModal() {
 
       modal.classList.remove(
-        'open'
+        "open"
+      );
+
+
+      body.classList.remove(
+        "modal-open"
       );
 
 
       modal.setAttribute(
-        'aria-hidden',
-        'true'
+        "aria-hidden",
+        "true"
       );
 
 
@@ -2150,15 +2335,13 @@
 
 
       loginForm.reset();
-
       signupForm.reset();
-
     }
 
 
-    // =========================
-    // Ripple Effect
-    // =========================
+    /* =========================
+       RIPPLE
+    ========================== */
 
     function rippleEffect(
       button,
@@ -2167,12 +2350,12 @@
 
       const ripple =
         document.createElement(
-          'span'
+          "span"
         );
 
 
       ripple.className =
-        'ripple';
+        "ripple";
 
 
       const rect =
@@ -2208,24 +2391,22 @@
 
 
       ripple.addEventListener(
-        'animationend',
-        () => {
-          ripple.remove();
-        }
+        "animationend",
+        () => ripple.remove()
       );
-
     }
 
 
-    // =========================
-    // SIGN UP
-    // =========================
+    /* =========================
+       SIGN UP
+    ========================== */
 
     async function handleSignup(
       event
     ) {
 
       event.preventDefault();
+
 
       clearMessages();
 
@@ -2246,8 +2427,6 @@
         signupConfirmPassword.value;
 
 
-      // Validation
-
       if (
         !fullName ||
         !identifier ||
@@ -2257,8 +2436,22 @@
 
         showMessage(
           signupMessage,
-          'Please complete all sign-up fields.',
-          'error'
+          "Please complete all sign-up fields.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        fullName.length < 2
+      ) {
+
+        showMessage(
+          signupMessage,
+          "Please enter your full name.",
+          "error"
         );
 
         return;
@@ -2271,8 +2464,8 @@
 
         showMessage(
           signupMessage,
-          'Password must be at least 8 characters long.',
-          'error'
+          "Password must be at least 8 characters long.",
+          "error"
         );
 
         return;
@@ -2285,21 +2478,19 @@
 
         showMessage(
           signupMessage,
-          'Passwords do not match.',
-          'error'
+          "Passwords do not match.",
+          "error"
         );
 
         return;
       }
 
 
-      // Loading state
-
-      signupSubmit.disabled =
-        true;
-
-      signupSubmit.textContent =
-        'Creating Account...';
+      setButtonLoading(
+        signupSubmit,
+        "Creating Account...",
+        true
+      );
 
 
       try {
@@ -2308,20 +2499,21 @@
           await fetch(
             `${API_BASE_URL}/register`,
             {
-              method: 'POST',
+              method: "POST",
+
+              credentials: "include",
 
               headers: {
-                'Content-Type':
-                  'application/json'
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json"
               },
 
               body: JSON.stringify({
-                identifier:
-                  identifier,
-
-                password:
-                  password,
-
+                identifier,
+                password,
                 displayName:
                   fullName
               })
@@ -2329,106 +2521,119 @@
           );
 
 
-        let data = {};
+        const data =
+          await parseResponse(
+            response
+          );
 
 
-        try {
-
-          data =
-            await response.json();
-
-        } catch {
-
-          data = {};
-
-        }
-
-
-        if (!response.ok) {
+        if (
+          !response.ok
+        ) {
 
           showMessage(
             signupMessage,
-            data.error ||
-              'Unable to create account.',
-            'error'
+            extractError(
+              data,
+              "Unable to create account."
+            ),
+            "error"
           );
 
           return;
         }
 
 
-        // Success
+        /*
+          Some backends automatically
+          log the user in after registration.
+        */
 
-        showMessage(
-          signupMessage,
-          'Account created successfully! Switching to Login...',
-          'success'
-        );
+        if (
+          data &&
+          data.token
+        ) {
+
+          saveToken(
+            data.token
+          );
+
+          setAuthenticated(
+            true
+          );
+
+          closeModal();
+
+          return;
+        }
 
 
-        loginIdentifier.value =
+        /*
+          Normal registration flow:
+          return user to login.
+        */
+
+        const createdIdentifier =
           identifier;
 
 
         signupForm.reset();
 
 
-        setTimeout(() => {
-
-          setView(
-            'login'
-          );
+        setView(
+          "login"
+        );
 
 
-          loginIdentifier.value =
-            identifier;
+        loginIdentifier.value =
+          createdIdentifier;
 
 
-          showMessage(
-            loginMessage,
-            'Account created successfully. Enter your password to log in.',
-            'success'
-          );
+        showMessage(
+          loginMessage,
+          "Account created successfully. Enter your password to log in.",
+          "success"
+        );
 
-        }, 900);
+
+        loginPassword.focus();
 
 
       } catch (error) {
 
         console.error(
-          'SIGNUP ERROR:',
+          "SIGNUP ERROR:",
           error
         );
 
 
         showMessage(
           signupMessage,
-          'Could not connect to the backend. Make sure your Node server is running on port 3000.',
-          'error'
+          "Could not connect to the backend. Check that your Node.js server is running.",
+          "error"
         );
 
       } finally {
 
-        signupSubmit.disabled =
-          false;
-
-        signupSubmit.textContent =
-          'Create Account';
-
+        setButtonLoading(
+          signupSubmit,
+          "Creating Account...",
+          false
+        );
       }
-
     }
 
 
-    // =========================
-    // LOGIN
-    // =========================
+    /* =========================
+       LOGIN
+    ========================== */
 
     async function handleLogin(
       event
     ) {
 
       event.preventDefault();
+
 
       clearMessages();
 
@@ -2441,8 +2646,6 @@
         loginPassword.value;
 
 
-      // Validation
-
       if (
         !identifier ||
         !password
@@ -2450,21 +2653,19 @@
 
         showMessage(
           loginMessage,
-          'Please enter your email/phone number and password.',
-          'error'
+          "Please enter your email/phone number and password.",
+          "error"
         );
 
         return;
       }
 
 
-      // Loading state
-
-      loginSubmit.disabled =
-        true;
-
-      loginSubmit.textContent =
-        'Logging in...';
+      setButtonLoading(
+        loginSubmit,
+        "Logging in...",
+        true
+      );
 
 
       try {
@@ -2473,133 +2674,245 @@
           await fetch(
             `${API_BASE_URL}/login`,
             {
-              method: 'POST',
+              method: "POST",
+
+              credentials: "include",
 
               headers: {
-                'Content-Type':
-                  'application/json'
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json"
               },
 
               body: JSON.stringify({
-                identifier:
-                  identifier,
-
-                password:
-                  password
+                identifier,
+                password
               })
             }
           );
 
 
-        let data = {};
+        const data =
+          await parseResponse(
+            response
+          );
 
 
-        try {
-
-          data =
-            await response.json();
-
-        } catch {
-
-          data = {};
-
-        }
-
-
-        // Backend returned an error
-
-        if (!response.ok) {
+        if (
+          !response.ok
+        ) {
 
           showMessage(
             loginMessage,
-            data.error ||
-              'Invalid email/phone number or password.',
-            'error'
+            extractError(
+              data,
+              "Invalid email/phone number or password."
+            ),
+            "error"
           );
 
           return;
         }
 
 
-        // Login successful
+        /*
+          JWT authentication.
+        */
 
-        console.log(
-          'LOGIN SUCCESS:',
-          data
-        );
+        if (
+          data &&
+          data.token
+        ) {
 
-
-        // Save JWT
-
-        if (data.token) {
-
-          localStorage.setItem(
-            'socialAuthToken',
+          saveToken(
             data.token
           );
-
         }
 
 
-        const displayName =
-          data.user &&
-          data.user.displayName
-            ? data.user.displayName
-            : 'there';
+        /*
+          A successful response without
+          a JWT can still be valid when
+          the backend uses HTTP-only cookies.
+        */
 
-
-        showMessage(
-          loginMessage,
-          `Welcome back, ${displayName}! Login successful.`,
-          'success'
+        setAuthenticated(
+          true
         );
 
 
-        // Optional:
-        // You can redirect to another page here.
-        //
-        // Example:
-        //
-        // window.location.href = 'dashboard.html';
+        closeModal();
+
+
+        /*
+          Clear the password from memory/UI.
+        */
+
+        loginPassword.value =
+          "";
+
+
+        console.log(
+          "LOGIN SUCCESS",
+          data
+        );
 
 
       } catch (error) {
 
         console.error(
-          'LOGIN ERROR:',
+          "LOGIN ERROR:",
           error
         );
 
 
         showMessage(
           loginMessage,
-          'Could not connect to the backend. Make sure your Node server is running on port 3000.',
-          'error'
+          "Could not connect to the backend. Check that your Node.js server is running.",
+          "error"
         );
 
       } finally {
 
-        loginSubmit.disabled =
-          false;
-
-        loginSubmit.textContent =
-          'Login';
-
+        setButtonLoading(
+          loginSubmit,
+          "Logging in...",
+          false
+        );
       }
-
     }
 
 
-    // =========================
-    // App Buttons
-    // =========================
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    async function logout() {
+
+      /*
+        If your backend has a logout endpoint,
+        this will use it.
+
+        If it doesn't, the frontend still
+        removes the JWT and logs the user out.
+      */
+
+      try {
+
+        const token =
+          getToken();
+
+
+        await fetch(
+          `${API_BASE_URL}/logout`,
+          {
+            method: "POST",
+
+            credentials: "include",
+
+            headers: {
+              "Accept":
+                "application/json",
+
+              ...(token
+                ? {
+                    "Authorization":
+                      `Bearer ${token}`
+                  }
+                : {})
+            }
+          }
+        ).catch(() => {});
+
+
+      } finally {
+
+        removeToken();
+
+
+        setAuthenticated(
+          false
+        );
+
+
+        loginForm.reset();
+        signupForm.reset();
+
+
+        currentApp =
+          "instagram";
+
+
+        openModal(
+          "instagram"
+        );
+
+
+        showMessage(
+          loginMessage,
+          "You have been logged out.",
+          "success"
+        );
+      }
+    }
+
+
+    /* =========================
+       FORGOT PASSWORD
+    ========================== */
+
+    forgotBtn.addEventListener(
+      "click",
+      async () => {
+
+        const identifier =
+          loginIdentifier.value.trim();
+
+
+        if (!identifier) {
+
+          showMessage(
+            loginMessage,
+            "Enter your email or phone number first.",
+            "error"
+          );
+
+          loginIdentifier.focus();
+
+          return;
+        }
+
+
+        /*
+          The frontend cannot actually reset
+          a password unless the backend has
+          a reset-password endpoint.
+
+          We deliberately don't pretend that
+          password recovery is working.
+        */
+
+        showMessage(
+          loginMessage,
+          "Password recovery is not enabled on the backend yet.",
+          "error"
+        );
+      }
+    );
+
+
+    /* =========================
+       APP BUTTONS
+    ========================== */
 
     appButtons.forEach(
-      (button) => {
+      button => {
 
         button.addEventListener(
-          'click',
-          (event) => {
+          "click",
+          event => {
 
             rippleEffect(
               button,
@@ -2610,136 +2923,208 @@
             openModal(
               button.dataset.app
             );
-
           }
         );
-
       }
     );
 
 
-    // =========================
-    // Modal Controls
-    // =========================
+    /* =========================
+       MODAL CONTROLS
+    ========================== */
 
     closeBtn.addEventListener(
-      'click',
+      "click",
       closeModal
     );
 
 
     backBtn.addEventListener(
-      'click',
+      "click",
       closeModal
     );
 
 
-    // Click outside modal
-
     modal.addEventListener(
-      'click',
-      (event) => {
+      "click",
+      event => {
 
         if (
           event.target === modal
         ) {
 
           closeModal();
-
         }
-
       }
     );
 
 
-    // Escape key
+    /* =========================
+       ESCAPE KEY
+    ========================== */
 
     document.addEventListener(
-      'keydown',
-      (event) => {
+      "keydown",
+      event => {
 
         if (
-          event.key === 'Escape' &&
-          modal.classList.contains('open')
+          event.key === "Escape" &&
+          modal.classList.contains("open")
         ) {
 
           closeModal();
-
         }
-
       }
     );
 
 
-    // =========================
-    // LOGIN <-> SIGN UP
-    // =========================
+    /* =========================
+       LOGIN <-> SIGN UP
+    ========================== */
 
     goToSignupBtn.addEventListener(
-      'click',
+      "click",
       () => {
 
         setView(
-          'signup'
+          "signup"
         );
-
       }
     );
 
 
     goToLoginBtn.addEventListener(
-      'click',
+      "click",
       () => {
 
         setView(
-          'login'
+          "login"
         );
-
       }
     );
 
 
-    // =========================
-    // Forgot Password
-    // =========================
-
-    forgotBtn.addEventListener(
-      'click',
-      () => {
-
-        showMessage(
-          loginMessage,
-          'Password recovery is not connected yet. You can add a forgot-password endpoint to the backend later.',
-          'success'
-        );
-
-      }
-    );
-
-
-    // =========================
-    // Form Submit
-    // =========================
+    /* =========================
+       FORM SUBMIT
+    ========================== */
 
     loginForm.addEventListener(
-      'submit',
+      "submit",
       handleLogin
     );
 
 
     signupForm.addEventListener(
-      'submit',
+      "submit",
       handleSignup
     );
 
 
-    // =========================
-    // Initial Setup
-    // =========================
+    /* =========================
+       LOGOUT
+    ========================== */
 
-    applyTheme(
-      currentApp
+    logoutBtn.addEventListener(
+      "click",
+      logout
     );
+
+
+    /* =========================
+       INITIALIZATION
+    ========================== */
+
+    function initializeApp() {
+
+      console.log(
+        "AUTH APP LOADED"
+      );
+
+
+      applyTheme(
+        currentApp
+      );
+
+
+      /*
+        Save original button labels
+        for the loading-state helper.
+      */
+
+      loginSubmit.dataset.originalText =
+        "Login";
+
+
+      signupSubmit.dataset.originalText =
+        "Create Account";
+
+
+      /*
+        Check whether the user already
+        has a locally stored JWT.
+      */
+
+      const token =
+        getToken();
+
+
+      if (token) {
+
+        /*
+          Existing token = keep the user
+          inside the application.
+
+          Your backend should still validate
+          the token when protected API calls
+          are made.
+        */
+
+        setAuthenticated(
+          true
+        );
+
+
+        closeModal();
+
+
+      } else {
+
+        /*
+          No token = authentication required.
+        */
+
+        setAuthenticated(
+          false
+        );
+
+
+        openModal(
+          "instagram"
+        );
+      }
+    }
+
+
+    /*
+      The script is at the bottom of
+      the document, but this also works
+      if the script is moved later.
+    */
+
+    if (
+      document.readyState ===
+      "loading"
+    ) {
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        initializeApp
+      );
+
+    } else {
+
+      initializeApp();
+    }
 
   </script>
 

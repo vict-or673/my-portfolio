@@ -18,6 +18,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "app.html"));
+});
 
 // Serve index.html from the public folder
 app.use(express.static(path.join(__dirname, "..", "public")));
